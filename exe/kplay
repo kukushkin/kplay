@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'kplay'
+
+using Rainbow
+
+begin
+  Kplay::CLI.start(ARGV)
+rescue => e
+  if ENV['debug']
+    puts e
+    puts e.backtrace.join("\n")
+  end
+  abort 'ERROR: '.red + e.to_s
+end
