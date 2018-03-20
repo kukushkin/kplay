@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'rainbow/refinement'
+require 'pathname'
 
 require 'kplay/version'
 require_relative 'kplay/system'
