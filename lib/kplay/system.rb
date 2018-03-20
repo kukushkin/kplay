@@ -33,14 +33,13 @@ module Kplay
         puts cmd.join(' ') if opts[:echo]
         exit_status = nil
         if opts[:tty]
-          system(*cmd)
-          exit_status = 0
+          exit_status = system(*cmd) ? 0 : -1
         else
           out, status = Open3.capture2(*cmd)
           puts out if opts[:output]
           exit_status = status.exitstatus
         end
-        raise "Failed to execute '#{cmd.join(' ')}' (#{status.exitstatus})" unless exit_status == 0
+        raise "Failed to execute '#{cmd.join(' ')}' (#{exit_status})" unless exit_status == 0
       end
 
       # Checks if program with given name is present. Raises an error if the program is not found.
