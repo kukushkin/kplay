@@ -12,7 +12,8 @@ module Kplay
       'mount_path' => '/${name}',
       'shell' => '/bin/bash',
       'shell_args' => ['-c', 'cd /${name}; exec "${SHELL:-sh}"'],
-      'stop_grace_period' => 5
+      'stop_grace_period' => 5,
+      'etc_hosts' => [] # <ip> <alias1> [<alias2> ...]
     }.freeze
 
     attr_reader :path, :data

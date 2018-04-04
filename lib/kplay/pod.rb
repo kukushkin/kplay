@@ -34,11 +34,16 @@ module Kplay
     # @return [Hash]
     #
     def configuration
+      host_aliases = config[:etc_hosts].map do |host|
+        ip, *hostnames = host.strip.split(' ')
+        { 'ip' => ip, 'hostnames' => hostnames }
+      end
       {
         'apiVersion' => 'v1',
         'kind' => 'Pod',
         'metadata' => { 'name' => name },
         'spec' => {
+          'hostAliases' => host_aliases,
           'containers' => [
             {
               'name' => name,
