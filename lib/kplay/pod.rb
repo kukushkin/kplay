@@ -70,11 +70,11 @@ module Kplay
       return c unless Kplay::Minikube.ssh_forwarding_available?
       # enable SSH forwarding
       c['spec']['containers'].first['env'] <<
-        { 'name' => 'SSH_AUTH_SOCK', 'value' => Kplay::Minikube.ssh_forwarding_socket_vm }
+        { 'name' => 'SSH_AUTH_SOCK', 'value' => Kplay::Minikube.ssh_forwarding_socket_vm.to_s }
       c['spec']['containers'].first['volumeMounts'] <<
-        { 'name' => 'ssh_auth_sock', 'mountPath' => Kplay::Minikube.ssh_forwarding_socket_vm }
+        { 'name' => 'ssh_auth_sock', 'mountPath' => Kplay::Minikube.ssh_forwarding_socket_vm.to_s }
       c['spec']['volumes'] <<
-        { 'name' => 'ssh_auth_sock', 'hostPath' => { 'path' => Kplay::Minikube.ssh_forwarding_socket_vm } }
+        { 'name' => 'ssh_auth_sock', 'hostPath' => { 'path' => Kplay::Minikube.ssh_forwarding_socket_vm.to_s } }
       c
     end
 
