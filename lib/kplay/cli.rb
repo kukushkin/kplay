@@ -30,6 +30,15 @@ module Kplay
       puts config.to_h.to_yaml
     end
 
+    desc 'pod_config', 'Displays the pod config'
+    option :image, aliases: :i, desc: 'Image to use'
+    def pod_config
+      Kplay.assert_requirements!
+      pod = Kplay::Pod.new(Dir.pwd, Kplay::Config.local, options)
+      puts pod.configuration
+    end
+
+
     desc 'status', 'Displays the cluster and container (pod) status'
     def status
       Kplay.assert_requirements!

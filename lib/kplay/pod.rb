@@ -38,7 +38,7 @@ module Kplay
         ip, *hostnames = host.strip.split(' ')
         { 'ip' => ip, 'hostnames' => hostnames }
       end
-      {
+      c = {
         'apiVersion' => 'v1',
         'kind' => 'Pod',
         'metadata' => { 'name' => name },
@@ -49,8 +49,12 @@ module Kplay
               'name' => name,
               'image' => options[:image] || config[:image],
               'imagePullPolicy' => 'IfNotPresent',
+              'env' => [
+                # { 'name' => ..., 'value' => ... }
+              ],
               'volumeMounts' => [
-                { 'mountPath' => config[:mount_path], 'name' => volume_name }
+                { 'mountPath' => config[:mount_path], 'name' => volume_name },
+                # <-- ssh forwarding socket should be mounted a CONTAINER here
               ]
             }
           ],
@@ -59,9 +63,19 @@ module Kplay
               'name' => volume_name,
               'hostPath' => { 'path' => path_host }
             }
+            # <-- ssh forwarding socket in VM mounted here
           ]
         }
       }
+      return c unless Kplay::Minikube.ssh_forwarding_available?
+      # enable SSH forwarding
+      c['spec']['containers'].first['env'] <<
+        { 'name' => 'SSH_AUTH_SOCK', 'value' => Kplay::Minikube.ssh_forwarding_socket_vm }
+      c['spec']['containers'].first['volumeMounts'] <<
+        { 'name' => 'ssh_auth_sock', 'mountPath' => Kplay::Minikube.ssh_forwarding_socket_vm }
+      c['spec']['volumes'] <<
+        { 'name' => 'ssh_auth_sock', 'hostPath' => { 'path' => Kplay::Minikube.ssh_forwarding_socket_vm } }
+      c
     end
 
     # Returns Kubernetes pod configuration in YAML
