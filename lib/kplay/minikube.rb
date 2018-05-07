@@ -43,21 +43,5 @@ module Kplay
       end
       Pathname.new(path_host.to_s.sub(hostfolder_host.to_s, hostfolder_vm.to_s))
     end
-
-
-    # Returns true if SSH agent forwarding can be enabled
-    # (socket resides in VM mounted folders)
-    #
-    def self.ssh_forwarding_available?
-      !!ssh_forwarding_socket_vm
-    end
-
-    # Returns path to SSH agent forwarding socket in a VM
-    #
-    def self.ssh_forwarding_socket_vm
-      socket_path = ENV['SSH_AUTH_SOCK']
-      return nil unless socket_path
-      Minikube.host_path_in_vm(socket_path) rescue nil
-    end
   end # module Minikube
 end # module Kplay

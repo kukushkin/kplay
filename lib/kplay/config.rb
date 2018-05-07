@@ -13,7 +13,8 @@ module Kplay
       'shell' => '/bin/bash',
       'shell_args' => ['-c', 'cd /${name}; exec "${SHELL:-sh}"'],
       'stop_grace_period' => 5,
-      'etc_hosts' => [] # <ip> <alias1> [<alias2> ...]
+      'etc_hosts' => [], # <ip> <alias1> [<alias2> ...],
+      'volumes' => [] # ["<from>:<to>", ...]
     }.freeze
 
     attr_reader :path, :data
