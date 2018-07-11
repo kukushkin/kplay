@@ -61,7 +61,7 @@ module Kplay
           'volumes' => [
             {
               'name' => volume_name,
-              'hostPath' => { 'path' => path_host }
+              'hostPath' => { 'path' => path_vm }
             }
             # <-- ssh forwarding socket in VM mounted here
           ]
