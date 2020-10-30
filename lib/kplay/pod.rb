@@ -100,7 +100,7 @@ module Kplay
     #
     def stop!
       Kplay.sh(
-        ['kubectl', 'delete', 'pod', name, "--grace-period=#{config[:stop_grace_period]}", '--force'],
+        ['kubectl', 'delete', 'pod', name, "--grace-period=#{config[:stop_grace_period]}"],
         echo: options[:verbose]
       )
     end
@@ -109,7 +109,7 @@ module Kplay
     #
     def shell
       Kplay.sh(
-        ['kubectl', 'exec', name, '-ti', config[:shell], '--', *config[:shell_args]],
+        ['kubectl', 'exec', '-ti', name, '--', config[:shell], *config[:shell_args]],
         tty: true,
         echo: options[:verbose]
       )
