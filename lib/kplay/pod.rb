@@ -7,6 +7,9 @@ module Kplay
   # Pod represents a pod associated with a folder on a host machine
   #
   class Pod
+    DEFAULT_SHM_VOLUME_NAME = "pod-shm-volume"
+    DEFAULT_SHM_VOLUME_PATH = "/dev/shm"
+
     attr_reader :name, :config, :volume_name, :path_host, :path_vm, :mount_path, :options
 
     # Creates a Pod from a path on host
@@ -54,6 +57,7 @@ module Kplay
               ],
               'volumeMounts' => [
                 { 'mountPath' => config[:mount_path], 'name' => volume_name },
+                { 'mountPath' => DEFAULT_SHM_VOLUME_PATH, 'name' => DEFAULT_SHM_VOLUME_NAME },
                 # <-- ssh forwarding socket should be mounted a CONTAINER here
               ]
             }
@@ -62,6 +66,13 @@ module Kplay
             {
               'name' => volume_name,
               'hostPath' => { 'path' => path_vm.to_s }
+            },
+            {
+              'name' => DEFAULT_SHM_VOLUME_NAME,
+              'emptyDir' => {
+                'medium' => 'Memory',
+                'sizeLimit' => config[:shm_size]
+              }
             }
             # <-- ssh forwarding socket in VM mounted here
           ]

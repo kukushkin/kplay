@@ -10,6 +10,7 @@ module Kplay
     GLOBAL_DEFAULTS = {
       'image' => 'dev',
       'mount_path' => '/${name}',
+      'shm_size' => '64Mi',
       'shell' => '/bin/bash',
       'shell_args' => ['-c', 'cd /${name}; exec "${SHELL:-sh}"'],
       'stop_grace_period' => 5,
